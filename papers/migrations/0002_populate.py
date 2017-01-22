@@ -10,6 +10,7 @@ import tempfile
 import zipfile
 import sqlite3
 
+from django.conf import settings
 from django.db import migrations
 from django.contrib.auth.models import User
 from papers.models import Tag, Paper
@@ -44,11 +45,8 @@ ORDER BY publication_date ASC
 """
 
 
-PAPERS_LIBRARY_PATH = '~/Dropbox/Library.papers3'
-
-
 def load_papers3_database():
-    path = op.expanduser(PAPERS_LIBRARY_PATH)
+    path = settings.PAPERS_LIBRARY_PATH
     path = glob.glob(op.join(path, 'CompressedCheckpoints', 'Database.*'))[0]
     with tempfile.TemporaryDirectory() as temp_dir:
         with zipfile.ZipFile(path) as f:
@@ -74,6 +72,7 @@ def flatten(l):
 
 
 def import_data(apps, schema_editor):
+    # Create super user.
     User.objects.create_superuser(username='admin',
                                   password='admin',
                                   email='',

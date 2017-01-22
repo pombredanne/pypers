@@ -26,4 +26,4 @@ class Paper(models.Model):
         return self.notes != ''
 
     def __str__(self):
-        return '%d %s - %s' % (self.year, self.authors, self.title)
+        return '%d %s' % (self.year or 0, self.authors)
