@@ -9,7 +9,7 @@ serve:
 rm:
 	cp db.sqlite3 db.sqlite3~
 	@echo "Delete database"
-	rm -i db.sqlite3
+	rm db.sqlite3
 
 migrate:
 	@echo "Migrate"
