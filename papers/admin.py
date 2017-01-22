@@ -12,10 +12,14 @@ class PaperAdmin(admin.ModelAdmin):
     ordering = ('-year',)
     actions = None
     list_display = ('year', 'authors', 'title_short', 'rating_stars',
-                    'tags_list', 'citekey')
+                    'tags_list', 'citekey', 'has_notes')
     list_display_links = ('title_short',)
     list_filter = ('tags', 'rating', 'read_status')
     search_fields = ('full_authors', 'title', 'year')
+
+    def has_notes(self, obj):
+        return obj.notes is not None
+    has_notes.boolean = True
 
     def title_short(self, obj):
         return truncatechars(obj.title, 48)
