@@ -34,6 +34,7 @@ tag_string as tags,
 rating,
 notes,
 read_status,
+summary,
 strftime('%Y-%m-%d', datetime(imported_date, 'unixepoch')) as imported_date,
 PDF.path as path
 FROM Publication
@@ -84,7 +85,6 @@ def import_data(apps, schema_editor):
     tags = sorted(set(_.strip()
                       for _ in set(flatten(df.tags.str.split(',').tolist()))))
     for tag in tags:
-        print("Import %s" % tag)
         Tag(name=tag).save()
 
     # Import papers.

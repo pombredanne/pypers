@@ -24,6 +24,7 @@ class Migration(migrations.Migration):
                 ('citekey', models.CharField(max_length=16, unique=True, verbose_name='citekey')),
                 ('rating', models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='rating')),
                 ('notes', models.TextField(null=True, verbose_name='notes')),
+                ('summary', models.TextField(null=True, verbose_name='summary')),
                 ('read_status', models.BooleanField(verbose_name='read_status')),
                 ('imported_date', models.DateField(blank=True, null=True, verbose_name='imported_date')),
                 ('pdf_path', models.CharField(blank=True, max_length=128, null=True, verbose_name='pdf_path')),

@@ -16,6 +16,7 @@ class Paper(models.Model):
     citekey = models.CharField('citekey', max_length=16, unique=True)
     rating = models.PositiveSmallIntegerField('rating', blank=True, null=True)
     notes = models.TextField('notes', null=True)
+    summary = models.TextField('summary', null=True)
     read_status = models.BooleanField('read_status')
     imported_date = models.DateField('imported_date', blank=True, null=True)
     pdf_path = models.CharField('pdf_path', max_length=128,

@@ -20,7 +20,7 @@ class PaperAdmin(admin.ModelAdmin):
                     'tags_list', 'citekey', 'notes_html')
     list_display_links = ('authors',)
     list_filter = ('tags', 'rating', 'read_status')
-    search_fields = ('full_authors', 'title', 'year')
+    search_fields = ('full_authors', 'title', 'year', 'summary')
 
     def notes_html(self, obj):
         if not obj.notes:
