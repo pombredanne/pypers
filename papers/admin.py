@@ -33,8 +33,8 @@ class PaperAdmin(admin.ModelAdmin):
     list_display = ('year', 'authors', 'title_short', 'rating_stars',
                     'tags_list', 'citekey', 'imported_date', 'has_notes')
     list_display_links = ('authors',)
-    list_filter = ('tags',
-                   RatingFilter,
+    list_filter = (RatingFilter,
+                  'tags',
                    'read_status')
     search_fields = ('full_authors', 'title', 'year',
                      'summary', 'annotations')
