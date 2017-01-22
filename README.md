@@ -23,3 +23,4 @@ The app finds the compressed sqlite database in `~/Dropbox/Library.papers3/` (by
 * `make migrate` to import the Papers library into pypers
 * `make serve`
 * go to `http://localhost:8000/admin/`
+* Default username/password: `admin/admin`

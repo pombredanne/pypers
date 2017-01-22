@@ -12,14 +12,30 @@ class TagAdmin(admin.ModelAdmin):
     actions = None
 
 
+class RatingFilter(admin.SimpleListFilter):
+    title = 'Rating'
+    parameter_name = 'rating'
+
+    def lookups(self, request, model_admin):
+        return [(str(i) if i else None, '★' * i) for i in range(0, 6)]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(rating__gte=self.value())
+        else:
+            return queryset
+
+
 class PaperAdmin(admin.ModelAdmin):
     ordering = ('-year',)
     actions = None
     readonly_fields = ('id',)
     list_display = ('year', 'authors', 'title_short', 'rating_stars',
-                    'tags_list', 'citekey', 'notes_html')
+                    'tags_list', 'citekey', 'has_notes')
     list_display_links = ('authors',)
-    list_filter = ('tags', 'rating', 'read_status')
+    list_filter = ('tags',
+                   RatingFilter,
+                   'read_status')
     search_fields = ('full_authors', 'title', 'year', 'summary')
 
     def notes_html(self, obj):
@@ -33,7 +49,7 @@ class PaperAdmin(admin.ModelAdmin):
     has_notes.boolean = True
 
     def title_short(self, obj):
-        s = truncatechars(obj.title, 48)
+        s = truncatechars(obj.title, 64)
         if not obj.pdf_path:
             return s
         path = reverse('get_paper')
