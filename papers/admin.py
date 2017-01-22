@@ -17,10 +17,16 @@ class PaperAdmin(admin.ModelAdmin):
     actions = None
     readonly_fields = ('id',)
     list_display = ('year', 'authors', 'title_short', 'rating_stars',
-                    'tags_list', 'citekey', 'has_notes')
+                    'tags_list', 'citekey', 'notes_html')
     list_display_links = ('authors',)
     list_filter = ('tags', 'rating', 'read_status')
     search_fields = ('full_authors', 'title', 'year')
+
+    def notes_html(self, obj):
+        if not obj.notes:
+            return ''
+        return format_html(obj.notes.strip().replace('\n', '<br />'))
+    notes_html.short_description = 'notes'
 
     def has_notes(self, obj):
         return obj.notes is not None
