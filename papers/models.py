@@ -18,8 +18,12 @@ class Paper(models.Model):
     notes = models.TextField('notes', null=True)
     read_status = models.BooleanField('read_status')
     imported_date = models.DateField('imported_date', blank=True, null=True)
-    pdf_path = models.FilePathField('pdf_path', blank=True, null=True)
+    pdf_path = models.CharField('pdf_path', max_length=128,
+                                blank=True, null=True)
     tags = models.ManyToManyField(Tag)
+
+    def has_notes(self):
+        return self.notes != ''
 
     def __str__(self):
         return '%d %s - %s' % (self.year, self.authors, self.title)
