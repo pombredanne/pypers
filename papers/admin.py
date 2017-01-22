@@ -17,7 +17,7 @@ class RatingFilter(admin.SimpleListFilter):
     parameter_name = 'rating'
 
     def lookups(self, request, model_admin):
-        return [(str(i) if i else None, '★' * i) for i in range(0, 6)]
+        return [(str(i), '★' * i) for i in range(1, 6)]
 
     def queryset(self, request, queryset):
         if self.value():
@@ -36,7 +36,8 @@ class PaperAdmin(admin.ModelAdmin):
     list_filter = ('tags',
                    RatingFilter,
                    'read_status')
-    search_fields = ('full_authors', 'title', 'year', 'summary')
+    search_fields = ('full_authors', 'title', 'year',
+                     'summary', 'annotations')
 
     def notes_html(self, obj):
         if not obj.notes:

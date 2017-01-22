@@ -35,13 +35,16 @@ rating,
 notes,
 read_status,
 summary,
+group_concat(Annotation.text, "\n\n") as annotations,
 strftime('%Y-%m-%d', datetime(imported_date, 'unixepoch')) as imported_date,
-PDF.path as path
+group_concat(PDF.path) as path
 FROM Publication
-LEFT JOIN PDF ON Publication.uuid = PDF.object_id
+LEFT JOIN PDF ON PDF.object_id = Publication.uuid
 AND PDF.mime_type = "application/pdf"
+LEFT JOIN Annotation ON Annotation.object_id = PDF.uuid
 WHERE citekey IS NOT NULL
 AND authors IS NOT NULL
+GROUP BY citekey
 ORDER BY publication_date ASC
 """
 
@@ -64,7 +67,7 @@ def load_papers3_database():
                                        )
         db.close()
         # Remove citekey duplicates.
-        df = df.drop_duplicates('citekey')
+        # df = df.drop_duplicates('citekey')
         return df
 
 
@@ -96,7 +99,7 @@ def import_data(apps, schema_editor):
             del d['tags']
             d['year'] = int(d['year']) if d['year'] > 0 else None
             d['rating'] = int(d['rating']) if d['rating'] > 0 else None
-            d['pdf_path'] = d.pop('path')
+            d['pdf_path'] = (d.pop('path', '') or '').split(',')[0].strip()
             d['read_status'] = d['read_status'] != 0
             p = Paper(**d)
             yield p
