@@ -31,7 +31,7 @@ class PaperAdmin(admin.ModelAdmin):
     actions = None
     readonly_fields = ('id',)
     list_display = ('year', 'authors', 'title_short', 'rating_stars',
-                    'tags_list', 'citekey', 'has_notes')
+                    'tags_list', 'citekey', 'imported_date', 'has_notes')
     list_display_links = ('authors',)
     list_filter = ('tags',
                    RatingFilter,
@@ -65,6 +65,11 @@ class PaperAdmin(admin.ModelAdmin):
     def tags_list(self, obj):
         return ', '.join(sorted(t.name for t in obj.tags.all()))
     tags_list.short_description = 'tags'
+
+    class Media:
+        css = {
+             'all': ('css/admin/styles.css',)
+        }
 
 
 # Register your models here.
