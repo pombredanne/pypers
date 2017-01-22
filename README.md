@@ -1,6 +1,6 @@
 # pypers
 
-Brower your [Papers.app](http://papersapp.com/) library from your web browser. You can now access your papers from non-MacOS computers.
+Browse your [Papers.app](http://papersapp.com/) library from your web browser. You can now access your papers from non-MacOS computers.
 
 
 ## Caveats
