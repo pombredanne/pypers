@@ -43,7 +43,7 @@ LEFT JOIN PDF ON PDF.object_id = Publication.uuid
 AND PDF.mime_type = "application/pdf"
 LEFT JOIN Annotation ON Annotation.object_id = PDF.uuid
 WHERE citekey IS NOT NULL
-AND authors IS NOT NULL
+AND full_authors IS NOT NULL
 GROUP BY citekey
 ORDER BY publication_date ASC
 """
@@ -101,6 +101,9 @@ def import_data(apps, schema_editor):
             d['rating'] = int(d['rating']) if d['rating'] > 0 else None
             d['pdf_path'] = (d.pop('path', '') or '').split(',')[0].strip()
             d['read_status'] = d['read_status'] != 0
+            if not d['authors']:
+                d['authors'] = (d['full_authors'].split(',')[0].split(' ')[-1]
+                                + ' et al.')
             p = Paper(**d)
             yield p
 
