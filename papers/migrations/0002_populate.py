@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 # import os
 import os.path as op
 import glob
+import logging
 import pandas as pd
 import tempfile
 import zipfile
@@ -14,6 +15,8 @@ from django.conf import settings
 from django.db import migrations
 from django.contrib.auth.models import User
 from papers.models import Tag, Paper
+
+logger = logging.getLogger(__name__)
 
 
 QUERY = """
@@ -104,6 +107,8 @@ def import_data(apps, schema_editor):
             if not d['authors']:
                 d['authors'] = (d['full_authors'].split(',')[0].split(' ')[-1]
                                 + ' et al.')
+                if d['authors'] == ' et al.':
+                    continue
             p = Paper(**d)
             yield p
 
@@ -111,7 +116,11 @@ def import_data(apps, schema_editor):
 
     # Add tags.
     for _, row in df.iterrows():
-        paper = Paper.objects.get(citekey=row.citekey)
+        try:
+            paper = Paper.objects.get(citekey=row.citekey)
+        except:
+            logger.debug("Paper %s doesn't exist.", row.citekey)
+            continue
         paper.tags.add(*[Tag.objects.get(name=tag.strip())
                          for tag in row.tags.split(',') if tag.strip()])
 
